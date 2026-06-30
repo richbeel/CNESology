@@ -1,0 +1,12 @@
+---
+description: TrazeField — liniové stavby, mapa, výšky podél trasy
+alwaysApply: true
+---
+
+# TrazeField
+
+- Nový projekt pro **liniové stavby** (silnice, chodníky, sítě pod zemí) — ne kopírovat AutoMag doménu.
+- MVP: body s aktuální/cílovou výškou, mapa + GPS, verifikace stavu — **ne** real-time měření hloubky senzory.
+- Data: `AlignmentPoint` v `lib/types/alignment.ts`; demo v `lib/demo/`.
+- Mapy: Leaflet + OSM; na klientovi (`ssr: false` pro mapu).
+- Postup: nejdřív tablet/PWA, AR brýle až později.
