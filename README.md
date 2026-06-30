@@ -1,4 +1,4 @@
-# TrazeField
+# ČNES vision
 
 Přehled zemních prací podél trasy pro liniové stavby (silnice, chodníky, inženýrské sítě).
 
@@ -17,8 +17,8 @@ Otevři [http://localhost:3000](http://localhost:3000).
 
 ## Stav projektu
 
-MVP v0.1 — demo data v prohlížeči, bez databáze.
+MVP v0.1 — demo data v prohlížeči, Supabase auth a projekty.
 
 ## Repo
 
-Nový projekt oddělený od AutoMag. Po `git init` napoj na GitHub viz níže.
+Nový projekt oddělený od AutoMag.

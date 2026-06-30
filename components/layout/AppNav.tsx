@@ -1,29 +1,27 @@
 import Link from 'next/link';
+import type { Profile } from '@/lib/types/auth';
+import { signOut } from '@/lib/auth/actions';
+import { Button } from '@/components/ui/Button';
+import { CnesVisionLogo } from '@/components/branding/CnesVisionLogo';
 
-const links = [
-  { href: '/', label: 'Úvod' },
-  { href: '/map', label: 'Mapa v terénu' },
-  { href: '/points', label: 'Body trasy' },
-] as const;
+type AppNavProps = {
+  profile: Profile;
+};
 
-export function AppNav() {
+export function AppNav({ profile }: AppNavProps) {
+  const homeHref = profile.role === 'director' ? '/director' : '/dashboard';
+
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="text-lg font-semibold tracking-tight text-zinc-900">
-          TrazeField
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <Link href={homeHref} className="min-w-0 shrink">
+          <CnesVisionLogo nav />
         </Link>
-        <nav className="flex flex-wrap gap-2">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <form action={signOut} className="shrink-0">
+          <Button type="submit" variant="outline" size="sm">
+            Odhlásit
+          </Button>
+        </form>
       </div>
     </header>
   );

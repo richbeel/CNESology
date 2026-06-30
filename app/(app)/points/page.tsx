@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Button } from '@/components/ui/Button';
 import { DEMO_POINTS } from '@/lib/demo/alignment';
 import type { AlignmentPoint, WorkStatus } from '@/lib/types/alignment';
 import { remainingCutM, statusLabel, workTypeLabel } from '@/lib/types/alignment';
@@ -36,17 +37,17 @@ export default function PointsPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">Body trasy</h1>
-      <p className="mt-1 text-zinc-600">
+      <h1 className="text-2xl font-semibold">Body trasy (demo)</h1>
+      <p className="mt-1 text-muted">
         Přehled výšek a verifikace — kliknutím cyklujete stav (demo, data jen v prohlížeči).
       </p>
-      <p className="mt-2 text-sm font-medium text-zinc-800">
+      <p className="mt-2 text-sm font-medium text-foreground">
         Hotovo: {stats.done} / {stats.total}
       </p>
 
-      <div className="mt-4 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-zinc-200 bg-zinc-50 text-zinc-600">
+          <thead className="border-b border-border bg-surface-muted text-muted">
             <tr>
               <th className="px-3 py-2 font-medium">Staničník</th>
               <th className="px-3 py-2 font-medium">Typ</th>
@@ -57,9 +58,9 @@ export default function PointsPage() {
               <th className="px-3 py-2 font-medium">Akce</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-foreground">
             {points.map((point) => (
-              <tr key={point.id} className="border-b border-zinc-100 last:border-0">
+              <tr key={point.id} className="border-b border-border last:border-0">
                 <td className="px-3 py-2 font-medium">{point.station}</td>
                 <td className="px-3 py-2">{workTypeLabel(point.workType)}</td>
                 <td className="px-3 py-2">{point.currentElevationM} m</td>
@@ -67,13 +68,9 @@ export default function PointsPage() {
                 <td className="px-3 py-2">{remainingCutM(point)} m</td>
                 <td className="px-3 py-2">{statusLabel(point.status)}</td>
                 <td className="px-3 py-2">
-                  <button
-                    type="button"
-                    onClick={() => verifyPoint(point.id)}
-                    className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-700"
-                  >
+                  <Button type="button" size="sm" onClick={() => verifyPoint(point.id)}>
                     Změnit stav
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
