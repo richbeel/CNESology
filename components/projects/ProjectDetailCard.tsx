@@ -1,28 +1,17 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { updateProject, type UpdateProjectState } from '@/lib/projects/actions';
-import { formatConstructionPeriod } from '@/lib/projects/dates';
-import { ProjectDrawing } from '@/components/projects/ProjectDrawing';
+import { ProjectHub, type ProjectHubData } from '@/components/projects/ProjectHub';
 import { Button } from '@/components/ui/Button';
 import { DatePicker, type DatePickerHandle } from '@/components/ui/DatePicker';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Card } from '@/components/ui/Card';
 
-export type ProjectDetailData = {
-  id: string;
-  name: string;
-  location_hint: string | null;
-  description: string | null;
-  construction_start: string | null;
-  construction_end: string | null;
-};
-
 type ProjectDetailCardProps = {
-  project: ProjectDetailData;
+  project: ProjectHubData;
   drawing: { url: string; isPdf: boolean } | null;
 };
 
@@ -42,11 +31,6 @@ export function ProjectDetailCard({ project, drawing }: ProjectDetailCardProps) 
     }
     wasPending.current = pending;
   }, [pending, state.error, router]);
-
-  const constructionLabel = formatConstructionPeriod(
-    project.construction_start,
-    project.construction_end,
-  );
 
   if (editing) {
     return (
@@ -119,60 +103,25 @@ export function ProjectDetailCard({ project, drawing }: ProjectDetailCardProps) 
         </Card>
 
         {state.error ? (
-          <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+          <p
+            className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            role="alert"
+          >
             {state.error}
           </p>
         ) : null}
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2">
-            <Button type="submit" disabled={pending}>
-              {pending ? 'Ukládám…' : 'Uložit'}
-            </Button>
-            <Button type="button" variant="outline" disabled={pending} onClick={() => setEditing(false)}>
-              Zrušit
-            </Button>
-          </div>
+        <div className="mt-8 flex flex-wrap gap-2">
+          <Button type="submit" disabled={pending}>
+            {pending ? 'Ukládám…' : 'Uložit'}
+          </Button>
+          <Button type="button" variant="outline" disabled={pending} onClick={() => setEditing(false)}>
+            Zrušit
+          </Button>
         </div>
       </form>
     );
   }
 
-  return (
-    <>
-      <section className="mt-4">
-        <ProjectDrawing drawing={drawing} projectId={project.id} />
-      </section>
-
-      <div className="mt-6 space-y-4">
-        {project.description ? (
-          <div>
-            <h2 className="text-sm font-medium text-zinc-900">Popis</h2>
-            <p className="mt-1 text-sm text-muted whitespace-pre-wrap">{project.description}</p>
-          </div>
-        ) : null}
-        {project.location_hint ? (
-          <div>
-            <h2 className="text-sm font-medium text-zinc-900">Lokace</h2>
-            <p className="mt-1 text-sm text-muted">{project.location_hint}</p>
-          </div>
-        ) : null}
-        {constructionLabel ? (
-          <div>
-            <h2 className="text-sm font-medium text-zinc-900">Datum stavby</h2>
-            <p className="mt-1 text-sm text-muted">{constructionLabel}</p>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-        <Button type="button" variant="outline" onClick={() => setEditing(true)}>
-          Upravit
-        </Button>
-        <Link href={`/project/${project.id}/vr`}>
-          <Button size="lg">Vstoupit do VR</Button>
-        </Link>
-      </div>
-    </>
-  );
+  return <ProjectHub project={project} drawing={drawing} onEdit={() => setEditing(true)} />;
 }

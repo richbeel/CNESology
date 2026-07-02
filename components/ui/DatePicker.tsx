@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type Ref,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -42,6 +43,14 @@ const POPOVER_WIDTH = 288;
 const POPOVER_ESTIMATED_HEIGHT = 320;
 const VIEWPORT_PADDING = 12;
 const GAP = 8;
+
+function useClientMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
 
 function todayIso(): string {
   const now = new Date();
@@ -168,7 +177,7 @@ export const DatePicker = forwardRef(function DatePicker(
 ) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useClientMounted();
   const [iso, setIso] = useState(defaultValue ?? '');
   const [open, setOpen] = useState(false);
   const [view, setView] = useState(() => initialViewDate(defaultValue));
@@ -181,8 +190,6 @@ export const DatePicker = forwardRef(function DatePicker(
     },
     focus: () => triggerRef.current?.focus(),
   }));
-
-  useEffect(() => setMounted(true), []);
 
   const updatePosition = () => {
     if (!triggerRef.current) return;

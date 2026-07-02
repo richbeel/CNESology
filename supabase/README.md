@@ -11,7 +11,7 @@
    - Když uvidíte `policy … already exists`, nejdřív spusťte `002_reset_storage_policies.sql` a pak znovu celý `002`.
 7. Poté spusťte `supabase/migrations/003_projects_select_owner.sql` (oprava vytváření projektů).
 8. Pokud upload výkresu hlásí **row-level security**, spusťte `supabase/migrations/004_storage_upload_rls_fix.sql`.
-9. Pro datum stavby spusťte `supabase/migrations/005_project_construction_dates.sql`.
+9. Pro datum stavby spusťte [005_project_construction_dates.sql](./migrations/005_project_construction_dates.sql).
 
 Pokud vidíte `syntax error at or near "migrations"`, do editoru jste vložili cestu k souboru — zkuste znovu krok 4.
 

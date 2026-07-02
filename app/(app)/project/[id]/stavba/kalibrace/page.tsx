@@ -4,8 +4,7 @@ type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-/** Původní URL /vr → Režim stavby */
-export default async function ProjectVrRedirectPage({ params }: PageProps) {
+export default async function ProjectKalibraceRedirectPage({ params }: PageProps) {
   const { id } = await params;
   redirect(`/project/${id}/stavba`);
 }

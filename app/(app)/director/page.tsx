@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { getSessionProfile } from '@/lib/supabase/server';
@@ -9,6 +10,7 @@ export default async function DirectorPage() {
   if (session.profile.role !== 'director') redirect('/dashboard');
 
   const projects = await fetchAllProjects();
+  const activeProjects = projects.filter((p) => p.status !== 'completed');
   const active = projects.filter((p) => p.status === 'active').length;
   const future = projects.filter((p) => p.status === 'future').length;
   const completed = projects.filter((p) => p.status === 'completed').length;
@@ -24,19 +26,33 @@ export default async function DirectorPage() {
         <StatCard label="Hotové" value={completed} tone="orange" />
       </div>
 
-      {projects.length === 0 ? (
-        <p className="mt-8 rounded-2xl border border-dashed border-border bg-surface p-8 text-center text-muted">
-          Zatím nejsou evidovány žádné projekty.
-        </p>
-      ) : (
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <li key={project.id}>
-              <ProjectCard project={project} showOwner href={`/project/${project.id}`} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <section className="mt-10">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">Projekty</h2>
+          <Link
+            href="/director/archiv"
+            className="inline-flex h-9 shrink-0 items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-semibold text-heading transition-colors hover:bg-zinc-50"
+          >
+            Archiv
+          </Link>
+        </div>
+
+        {activeProjects.length === 0 ? (
+          <p className="mt-6 rounded-2xl border border-dashed border-border bg-surface p-8 text-center text-muted">
+            {completed > 0
+              ? 'Žádné aktivní ani budoucí projekty. Hotové najdete v archivu.'
+              : 'Zatím nejsou evidovány žádné projekty.'}
+          </p>
+        ) : (
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {activeProjects.map((project) => (
+              <li key={project.id}>
+                <ProjectCard project={project} showOwner href={`/project/${project.id}`} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { effectiveProjectStatus } from '@/lib/projects/status';
 import type { ProjectWithOwner } from '@/lib/types/project';
 
 const PROJECT_SELECT = `
@@ -22,7 +23,8 @@ type RawProject = Omit<ProjectWithOwner, 'owner'> & {
 
 function normalizeProject(row: RawProject): ProjectWithOwner {
   const owner = Array.isArray(row.owner) ? row.owner[0] : row.owner;
-  return { ...row, owner };
+  const status = effectiveProjectStatus(row);
+  return { ...row, owner, status };
 }
 
 export async function fetchMyProjects(userId: string): Promise<ProjectWithOwner[]> {

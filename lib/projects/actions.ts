@@ -6,6 +6,7 @@ import type { PostgrestError } from '@supabase/supabase-js';
 import { getSessionProfile } from '@/lib/supabase/server';
 import { createClient } from '@/lib/supabase/server';
 import { BUCKET, projectDrawingPath } from '@/lib/projects/storage';
+import { deriveProjectStatus } from '@/lib/projects/status';
 
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
 const ALLOWED_TYPES = new Set([
@@ -105,6 +106,8 @@ export async function createProject(
 
   const supabase = await createClient();
 
+  const status = deriveProjectStatus(constructionStart, constructionEnd);
+
   const { data: rows, error: insertError } = await supabase
     .from('projects')
     .insert({
@@ -114,7 +117,7 @@ export async function createProject(
       construction_start: constructionStart,
       construction_end: constructionEnd,
       owner_id: session.userId,
-      status: 'future',
+      status,
     })
     .select('id');
 
@@ -192,6 +195,8 @@ export async function updateProject(
 
   const supabase = await createClient();
 
+  const status = deriveProjectStatus(constructionStart, constructionEnd);
+
   const { error: updateError } = await supabase
     .from('projects')
     .update({
@@ -200,6 +205,7 @@ export async function updateProject(
       description: description || null,
       construction_start: constructionStart,
       construction_end: constructionEnd,
+      status,
     })
     .eq('id', id);
 

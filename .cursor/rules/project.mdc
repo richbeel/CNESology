@@ -1,14 +1,12 @@
 ---
-description: ČNES vision — liniové stavby, mapa, výšky podél trasy
+description: ČNES vision — liniové stavby, výkres, výšky podél trasy
 alwaysApply: true
 ---
 
 # ČNES vision
 
 - Nový projekt pro **liniové stavby** (silnice, chodníky, sítě pod zemí) — ne kopírovat AutoMag doménu.
-- MVP: body s aktuální/cílovou výškou, mapa + GPS, verifikace stavu — **ne** real-time měření hloubky senzory.
-- **Auth:** Supabase, účty bez registrace; role `site_manager` | `director`; projekty `future` | `active` | `completed`.
-- **Nová zakázka:** PDF → verifikace lokace → kalibrace 2 body GPS ↔ výkres.
-- Data: `AlignmentPoint` v `lib/types/alignment.ts`; projekty v Supabase.
-- Mapy: Leaflet + OSM; na klientovi (`ssr: false` pro mapu).
-- Postup: nejdřív tablet/PWA, AR brýle až později.
+- **Jádro:** výkres zakázky (PDF/obrázek) — celá obrazovka, zoom, posun. **Bez** kalibrace na Google mapu.
+- MVP: body s aktuální/cílovou výškou, verifikace stavu — demo v `lib/demo/`.
+- **Auth:** Supabase; role `site_manager` | `director`; projekty `future` | `active` | `completed`.
+- **Nová zakázka:** název, lokace, výkres (PDF/obrázek).
